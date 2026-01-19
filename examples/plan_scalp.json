@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "symbol": "ETH-USDT",
+    "market_type": "spot",
+    "ts": "2024-01-01T00:00:00Z",
+    "timeframe": "1m",
+    "plan_id": "scalp-eth-001"
+  },
+  "intent": {
+    "side": "short",
+    "regime": "high_volatility",
+    "confidence": 0.58
+  },
+  "entry": {
+    "type": "market",
+    "price_range": [2520, 2520],
+    "conditions": ["spread spike > 2x", "mean reversion signal"],
+    "tif": "IOC"
+  },
+  "risk": {
+    "stop_loss": 2550,
+    "take_profit": [
+      {"price": 2485, "size_pct": 1.0}
+    ],
+    "trailing": {"enabled": false, "distance_pct": 0.0},
+    "max_loss_pct": 0.05,
+    "risk_budget_pct": 0.005
+  },
+  "sizing": {
+    "leverage": 2,
+    "notional_usd": 3000,
+    "max_position_pct": 0.1,
+    "margin_mode": "cross"
+  },
+  "execution": {
+    "post_only": false,
+    "reduce_only": false,
+    "max_slippage_bps": 20,
+    "timeout_sec": 10,
+    "retry_policy": {"max_retries": 2, "backoff_sec": 1}
+  },
+  "validity": {
+    "expires_at": "2024-01-01T00:05:00Z",
+    "invalidation_conditions": ["spread normalizes", "volatility drops"]
+  },
+  "rationale": {
+    "signals_used": ["rsi_reversion", "bollinger_mean", "lob_spread"],
+    "event_summary": "No major headlines.",
+    "onchain_summary": "N/A",
+    "key_levels": [2500, 2550],
+    "notes": "Short scalp during volatility spike with tight stop."
+  }
+}
