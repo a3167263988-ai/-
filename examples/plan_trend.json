@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "symbol": "BTC-USDT",
+    "market_type": "perp",
+    "ts": "2024-01-01T00:00:00Z",
+    "timeframe": "4h",
+    "plan_id": "trend-btc-001"
+  },
+  "intent": {
+    "side": "long",
+    "regime": "trend",
+    "confidence": 0.72
+  },
+  "entry": {
+    "type": "limit",
+    "price_range": [42000, 42200],
+    "conditions": ["4h breakout retest", "orderbook imbalance > 0.2"],
+    "tif": "GTC"
+  },
+  "risk": {
+    "stop_loss": 40800,
+    "take_profit": [
+      {"price": 44000, "size_pct": 0.5},
+      {"price": 46000, "size_pct": 0.5}
+    ],
+    "trailing": {"enabled": true, "distance_pct": 0.015},
+    "max_loss_pct": 0.08,
+    "risk_budget_pct": 0.01
+  },
+  "sizing": {
+    "leverage": 5,
+    "notional_usd": 10000,
+    "max_position_pct": 0.2,
+    "margin_mode": "cross"
+  },
+  "execution": {
+    "post_only": true,
+    "reduce_only": false,
+    "max_slippage_bps": 10,
+    "timeout_sec": 30,
+    "retry_policy": {"max_retries": 3, "backoff_sec": 2}
+  },
+  "validity": {
+    "expires_at": "2024-01-01T04:00:00Z",
+    "invalidation_conditions": ["regime changes to chop", "event shock"]
+  },
+  "rationale": {
+    "signals_used": ["ema_trend", "adx", "lob_imbalance"],
+    "event_summary": "No critical events.",
+    "onchain_summary": "Exchange outflows rising.",
+    "key_levels": [41500, 42000, 43800],
+    "notes": "Trend continuation setup with retest entry."
+  }
+}

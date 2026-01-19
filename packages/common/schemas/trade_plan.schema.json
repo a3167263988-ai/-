@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/trade-plan.json",
+  "type": "object",
+  "required": ["meta", "intent", "entry", "risk", "sizing", "execution", "validity", "rationale"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["symbol", "market_type", "ts", "timeframe", "plan_id"],
+      "properties": {
+        "symbol": {"type": "string"},
+        "market_type": {"type": "string", "enum": ["spot", "perp"]},
+        "ts": {"type": "string", "format": "date-time"},
+        "timeframe": {"type": "string"},
+        "plan_id": {"type": "string"}
+      }
+    },
+    "intent": {
+      "type": "object",
+      "required": ["side", "regime", "confidence"],
+      "properties": {
+        "side": {"type": "string", "enum": ["long", "short", "flat"]},
+        "regime": {"type": "string"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "required": ["type", "price_range", "conditions", "tif"],
+      "properties": {
+        "type": {"type": "string", "enum": ["limit", "market", "stop", "if_touched"]},
+        "price_range": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "conditions": {"type": "array", "items": {"type": "string"}},
+        "tif": {"type": "string"}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["stop_loss", "take_profit", "trailing", "max_loss_pct", "risk_budget_pct"],
+      "properties": {
+        "stop_loss": {"type": "number"},
+        "take_profit": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["price", "size_pct"],
+            "properties": {
+              "price": {"type": "number"},
+              "size_pct": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        },
+        "trailing": {
+          "type": "object",
+          "required": ["enabled", "distance_pct"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "distance_pct": {"type": "number"}
+          }
+        },
+        "max_loss_pct": {"type": "number", "minimum": 0, "maximum": 1},
+        "risk_budget_pct": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "sizing": {
+      "type": "object",
+      "required": ["leverage", "notional_usd", "max_position_pct", "margin_mode"],
+      "properties": {
+        "leverage": {"type": "number", "minimum": 1, "maximum": 100},
+        "notional_usd": {"type": "number", "minimum": 0},
+        "max_position_pct": {"type": "number", "minimum": 0, "maximum": 1},
+        "margin_mode": {"type": "string", "enum": ["cross", "isolated"]}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["post_only", "reduce_only", "max_slippage_bps", "timeout_sec", "retry_policy"],
+      "properties": {
+        "post_only": {"type": "boolean"},
+        "reduce_only": {"type": "boolean"},
+        "max_slippage_bps": {"type": "number", "minimum": 0},
+        "timeout_sec": {"type": "number", "minimum": 0},
+        "retry_policy": {
+          "type": "object",
+          "required": ["max_retries", "backoff_sec"],
+          "properties": {
+            "max_retries": {"type": "integer", "minimum": 0},
+            "backoff_sec": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    },
+    "validity": {
+      "type": "object",
+      "required": ["expires_at", "invalidation_conditions"],
+      "properties": {
+        "expires_at": {"type": "string", "format": "date-time"},
+        "invalidation_conditions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "rationale": {
+      "type": "object",
+      "required": [
+        "signals_used",
+        "event_summary",
+        "onchain_summary",
+        "key_levels",
+        "notes"
+      ],
+      "properties": {
+        "signals_used": {"type": "array", "items": {"type": "string"}},
+        "event_summary": {"type": "string"},
+        "onchain_summary": {"type": "string"},
+        "key_levels": {"type": "array", "items": {"type": "number"}},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}
